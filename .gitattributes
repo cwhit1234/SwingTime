@@ -1,0 +1,6 @@
+# Normalize line endings to LF for the addon's text sources.
+* text=auto eol=lf
+*.lua  text eol=lf
+*.toc  text eol=lf
+*.xml  text eol=lf
+*.md   text eol=lf

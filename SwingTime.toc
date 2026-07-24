@@ -1,0 +1,36 @@
+## Interface: 11509
+## Title: SwingTime
+## Notes: Clean, customizable weapon swing timer bars.
+## Author: Raizen
+## Version: @project-version@
+## SavedVariables: SwingTimeDB
+## SavedVariablesPerCharacter: SwingTimeActiveProfile
+## IconTexture: Interface\Icons\Spell_Nature_TimeStop
+## X-Category: Combat
+## X-License: MIT
+# TODO: replace 000000 with your CurseForge project ID before the first release.
+## X-Curse-Project-ID: 000000
+
+# Embedded libraries (LibStub -> CallbackHandler-1.0 -> LibSharedMedia-3.0)
+embeds.xml
+
+# Localization
+Locales\enUS.lua
+
+# Storage + media
+Config.lua
+Media.lua
+
+# Swing-timing engine
+RangedDB.lua
+SwingCore.lua
+
+# Display
+Bars.lua
+
+# Bootstrap (loads after modules so all ST.* handlers exist)
+Core.lua
+
+# Configuration UI
+Options\Widgets.lua
+Options\Panel.lua

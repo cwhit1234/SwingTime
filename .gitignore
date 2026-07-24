@@ -1,0 +1,16 @@
+# Embedded libraries are fetched by the packager (see .pkgmeta externals),
+# so they are not tracked in git. They stay on disk for local testing.
+/libs/
+
+# Packager output
+/.release/
+
+# Tooling / harness state (not part of the addon)
+/.claude/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
