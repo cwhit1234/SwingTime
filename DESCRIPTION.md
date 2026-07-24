@@ -14,8 +14,8 @@ exactly how you want.
 ## Features
 
 - **Four bars** — main-hand, off-hand, ranged (hunter Auto Shot + wands), and your target.
-- **Fully customizable** — choose any bar texture and font from LibSharedMedia, recolor
-  every bar, and size each bar independently.
+- **Fully customizable** — choose any bar texture and font from LibSharedMedia, give every
+  bar its own color, and size each bar independently.
 - **Place it your way** — drag bars anywhere and lock them down.
 - **Profiles** — save different layouts and reuse them across characters.
 - **Accurate** — correctly handles haste, parry-haste, Windfury/extra attacks, weapon
