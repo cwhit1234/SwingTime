@@ -5,11 +5,9 @@
 
 # SwingTime
 
-Clean, customizable **weapon swing timer bars** for WoW Classic Era.
+Clean, customizable weapon swing timer bars for World of Warcraft **Classic Era**.
 
-Always know when your next attack lands. SwingTime shows crisp, modern bars for your
-main-hand, off-hand, ranged, and your target's swing — and lets you make them look
-exactly how you want.
+SwingTime shows crisp, modern bars for your main-hand, off-hand, ranged, and your target's swing. Style and place them however you like.
 
 ## Features
 
