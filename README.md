@@ -1,10 +1,8 @@
 # SwingTime
 
-Clean, customizable **weapon swing timer bars** for World of Warcraft **Classic Era**.
+Clean, customizable weapon swing timer bars for World of Warcraft **Classic Era**.
 
-Always know when your next attack lands. SwingTime shows crisp, modern bars for your
-main-hand, off-hand, ranged, and your target's swing — and lets you style and place
-them however you like.
+SwingTime shows crisp, modern bars for your main-hand, off-hand, ranged, and your target's swing. Style and place them however you like.
 
 ## Features
 
@@ -31,15 +29,9 @@ Copy the `SwingTime` folder into `World of Warcraft\_classic_era_\Interface\AddO
 | `/st lock` | Lock bars in place |
 | `/st toggle` | Toggle the lock |
 
-In the config window: enable each bar, pick which bar to size/color, choose a texture and
-font, set colors and opacity, and manage profiles.
-
 ## License
 
 MIT — see [`LICENSE`](LICENSE). © 2026 Raizen.
-
-The swing-timing engine is an independent implementation built from the public WoW API
-(`UnitAttackSpeed`, `UnitRangedDamage`, and the combat log).
 
 ---
 
