@@ -260,6 +260,47 @@ local function BuildBarsTab(content)
 		set = function(v) ST.Config.Set("oocAlpha", v) end,
 	}), 40))
 
+	-- CLASS-SPECIFIC TIMING MARKER =========================================
+	local markerKey, markerTitle
+	if ST.playerClass == "HUNTER" then
+		markerKey, markerTitle = "multishot", L["Multi-Shot Marker"]
+	elseif ST.playerClass == "PALADIN" then
+		markerKey, markerTitle = "sealtwist", L["Seal Twist Marker"]
+	end
+	if markerKey then
+		local base = "markers." .. markerKey
+		GSectionSpan(g, markerTitle)
+		AddRefresher(GAdd(g, 1, Widgets.CreateCheckbox(content, L["Enable"], {
+			get = function() return ST.Config.Get(base .. ".enabled") end,
+			set = function(v) ST.Config.Set(base .. ".enabled", v) end,
+		}), 24))
+		AddRefresher(GAdd(g, 1, Widgets.CreateSlider(content, L["Position (seconds before swing)"], 0.1, 2.0, 0.05, {
+			get = function() return ST.Config.Get(base .. ".position") end,
+			set = function(v) ST.Config.Set(base .. ".position", v) end,
+		}), 40))
+		AddRefresher(GAdd(g, 1, Widgets.CreateSlider(content, L["Marker width"], 1, 8, 1, {
+			get = function() return ST.Config.Get(base .. ".width") end,
+			set = function(v) ST.Config.Set(base .. ".width", v) end,
+		}), 40))
+		AddRefresher(GAdd(g, 2, Widgets.CreateDropdown(content, L["Marker texture"], {
+			searchable = true,
+			get = function() return ST.Config.Get(base .. ".texture") end,
+			set = function(v) ST.Config.Set(base .. ".texture", v) end,
+			items = function()
+				local out = {}
+				for _, name in ipairs(ST.Media.List("statusbar")) do
+					out[#out + 1] = { value = name, text = name, texture = ST.Media.Texture(name) }
+				end
+				return out
+			end,
+			previewTexture = function(v) return ST.Media.Texture(v) end,
+		}), 44))
+		AddRefresher(GAdd(g, 2, Widgets.CreateColorSwatch(content, L["Marker color"], {
+			get = function() return ST.Config.Get(base .. ".color") end,
+			set = function(v) ST.Config.Set(base .. ".color", v) end,
+		}), 22))
+	end
+
 	content:SetHeight(GHeight(g))
 end
 

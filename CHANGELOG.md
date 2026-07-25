@@ -1,5 +1,13 @@
 # SwingTime — Changelog
 
+## 1.0.1
+
+- Added a configurable **timing marker** (a vertical line) on the bars:
+  - **Hunter** — a Multi-Shot clip marker on the ranged bar.
+  - **Paladin** — a seal-twist window marker on the main-hand bar.
+- Each marker has its own **enable, position, width, texture, and color**, and only shows
+  for the relevant class. Configure it in the config window's Bars tab.
+
 ## 1.0.0
 
 Initial release.

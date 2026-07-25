@@ -23,6 +23,12 @@ L["Profiles"] = "Profiles"
 
 -- Config panel: bars tab
 L["Enable"] = "Enable"
+L["Multi-Shot Marker"] = "Multi-Shot Marker"
+L["Seal Twist Marker"] = "Seal Twist Marker"
+L["Position (seconds before swing)"] = "Position (seconds before swing)"
+L["Marker width"] = "Marker width"
+L["Marker texture"] = "Marker texture"
+L["Marker color"] = "Marker color"
 L["Enabled Bars"] = "Enabled Bars"
 L["Selected Bar"] = "Selected Bar"
 L["Global"] = "Global"

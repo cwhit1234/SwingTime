@@ -59,6 +59,12 @@ local function CreateBar(key)
 	castZone:Hide()
 	f.castZone = castZone
 
+	-- Timing marker: a thin vertical line (Multi-Shot clip / seal-twist window).
+	local marker = sb:CreateTexture(nil, "OVERLAY", nil, 1)
+	marker:SetTexture(WHITE)
+	marker:Hide()
+	f.marker = marker
+
 	local spark = sb:CreateTexture(nil, "OVERLAY")
 	spark:SetTexture(SPARK)
 	spark:SetBlendMode("ADD")
@@ -211,6 +217,31 @@ function Bars.UpdateBar(bar)
 		end
 	else
 		bar.castZone:Hide()
+	end
+
+	-- Vertical timing marker: Multi-Shot clip point (hunter ranged bar) or
+	-- seal-twist window (paladin main-hand bar). `position` is seconds before
+	-- the shot/swing; the marker sits at that point on the bar.
+	local markerCfg
+	if bar.key == "ranged" and ST.SwingCore.rangedIsAutoShot then
+		markerCfg = ST.Config.Get("markers.multishot")
+	elseif bar.key == "mainhand" and ST.playerClass == "PALADIN" then
+		markerCfg = ST.Config.Get("markers.sealtwist")
+	end
+	if markerCfg and markerCfg.enabled and speed > 0 then
+		local frac = 1 - (markerCfg.position or 0.4) / speed
+		if frac < 0 then frac = 0 elseif frac > 1 then frac = 1 end
+		local x = bar.sb:GetWidth() * frac
+		bar.marker:ClearAllPoints()
+		bar.marker:SetPoint("TOP", bar.sb, "TOPLEFT", x, 0)
+		bar.marker:SetPoint("BOTTOM", bar.sb, "BOTTOMLEFT", x, 0)
+		bar.marker:SetWidth(markerCfg.width or 3)
+		bar.marker:SetTexture(ST.Media.Texture(markerCfg.texture))
+		local c = markerCfg.color
+		bar.marker:SetVertexColor(c[1], c[2], c[3], c[4] or 1)
+		bar.marker:Show()
+	else
+		bar.marker:Hide()
 	end
 
 	if bar.timer:IsShown() then
