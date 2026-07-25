@@ -2,12 +2,13 @@
 
 ## 1.0.1
 
-- Added a **timing marker** (a vertical line) on the bars:
-  - **Hunter** — a Multi-Shot clip marker on the ranged bar.
-  - **Paladin** — a seal-twist window marker on the main-hand bar.
-- The marker position is fixed by the mechanic; you can customize its **width, texture, and
-  color** (and toggle it on/off). Only shows for the relevant class. Configure it in the
-  config window's Bars tab.
+- Added mechanic-accurate **timing markers**, shown only for the relevant class:
+  - **Hunter** — a Multi-Shot clip line on the ranged bar (at the auto-shot + multi-shot
+    cast point; cast Multi-Shot to its left to avoid clipping your auto shot).
+  - **Paladin** — a seal-twist guide on the main-hand bar: a red **danger zone** band with a
+    red tick at its start, plus a **twist tick** at the 0.4s twisting window.
+- Marker positions are fixed by the mechanic; you can customize the tick **width, texture, and
+  color** and toggle it on/off in the config window's Bars tab.
 
 ## 1.0.0
 

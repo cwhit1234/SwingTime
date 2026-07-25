@@ -65,6 +65,17 @@ local function CreateBar(key)
 	marker:Hide()
 	f.marker = marker
 
+	-- Paladin seal-twist: a red "danger zone" band and a red tick at its start.
+	local dangerZone = sb:CreateTexture(nil, "ARTWORK", nil, 1)
+	dangerZone:SetTexture(WHITE)
+	dangerZone:Hide()
+	f.dangerZone = dangerZone
+
+	local dangerTick = sb:CreateTexture(nil, "OVERLAY", nil, 1)
+	dangerTick:SetTexture(WHITE)
+	dangerTick:Hide()
+	f.dangerTick = dangerTick
+
 	local spark = sb:CreateTexture(nil, "OVERLAY")
 	spark:SetTexture(SPARK)
 	spark:SetBlendMode("ADD")
@@ -219,34 +230,65 @@ function Bars.UpdateBar(bar)
 		bar.castZone:Hide()
 	end
 
-	-- Vertical timing marker at a mechanic-fixed point on the bar:
-	--  * Hunter ranged: the Multi-Shot clip point. Multi-Shot's cast will clip
-	--    the auto shot if cast within (auto-shot cast window + multi-shot cast)
-	--    of the shot, i.e. ~2x the cast window -- cast to the left of the line.
-	--  * Paladin main-hand: the seal-twist window (~0.4s before the swing, the
-	--    Seal of Command activation window).
-	local markerCfg, markerPos
-	if bar.key == "ranged" and ST.SwingCore.rangedIsAutoShot then
-		markerCfg = ST.Config.Get("markers.multishot")
-		markerPos = 2 * (ST.SwingCore.rangedCastTime or 0.5)
-	elseif bar.key == "mainhand" and ST.playerClass == "PALADIN" then
-		markerCfg = ST.Config.Get("markers.sealtwist")
-		markerPos = 0.4
+	-- Vertical timing markers at mechanic-fixed points on the bar.
+	local sbw = bar.sb:GetWidth()
+	local function fracAt(rem)              -- bar fill fraction for `rem` seconds remaining
+		if speed <= 0 then return 0 end
+		local f = 1 - rem / speed
+		if f < 0 then return 0 elseif f > 1 then return 1 end
+		return f
 	end
-	if markerCfg and markerCfg.enabled and markerPos and speed > 0 then
-		local frac = 1 - markerPos / speed
-		if frac < 0 then frac = 0 elseif frac > 1 then frac = 1 end
-		local x = bar.sb:GetWidth() * frac
-		bar.marker:ClearAllPoints()
-		bar.marker:SetPoint("TOP", bar.sb, "TOPLEFT", x, 0)
-		bar.marker:SetPoint("BOTTOM", bar.sb, "BOTTOMLEFT", x, 0)
-		bar.marker:SetWidth(markerCfg.width or 3)
-		bar.marker:SetTexture(ST.Media.Texture(markerCfg.texture))
-		local c = markerCfg.color
-		bar.marker:SetVertexColor(c[1], c[2], c[3], c[4] or 1)
-		bar.marker:Show()
+	local function placeTick(tick, rem, texture, r, g, b, a, width)
+		local x = sbw * fracAt(rem)
+		tick:ClearAllPoints()
+		tick:SetPoint("TOP", bar.sb, "TOPLEFT", x, 0)
+		tick:SetPoint("BOTTOM", bar.sb, "BOTTOMLEFT", x, 0)
+		tick:SetWidth(width or 3)
+		tick:SetTexture(ST.Media.Texture(texture))
+		tick:SetVertexColor(r, g, b, a or 1)
+		tick:Show()
+	end
+
+	if bar.key == "ranged" and ST.SwingCore.rangedIsAutoShot then
+		-- Hunter Multi-Shot clip line: at (auto-shot cast + multi-shot cast)
+		-- before the shot; cast Multi-Shot to the left of it to avoid clipping.
+		bar.dangerZone:Hide()
+		bar.dangerTick:Hide()
+		local cfg = ST.Config.Get("markers.multishot")
+		if cfg and cfg.enabled and speed > 0 then
+			local c = cfg.color
+			placeTick(bar.marker, 2 * (ST.SwingCore.rangedCastTime or 0.5),
+				cfg.texture, c[1], c[2], c[3], c[4], cfg.width)
+		else
+			bar.marker:Hide()
+		end
+
+	elseif bar.key == "mainhand" and ST.playerClass == "PALADIN" then
+		-- Paladin seal twist: red danger band (0.4s + GCD .. 0.4s), a red tick
+		-- at its start, and a configurable twist tick at the 0.4s window start.
+		local cfg = ST.Config.Get("markers.sealtwist")
+		if cfg and cfg.enabled and speed > 0 then
+			local twistStart, dangerStart = 0.4, 0.4 + 1.5   -- twist window + GCD
+			local fDanger, fTwist = fracAt(dangerStart), fracAt(twistStart)
+			bar.dangerZone:ClearAllPoints()
+			bar.dangerZone:SetPoint("TOPLEFT", bar.sb, "TOPLEFT", sbw * fDanger, 0)
+			bar.dangerZone:SetPoint("BOTTOMLEFT", bar.sb, "BOTTOMLEFT", sbw * fDanger, 0)
+			bar.dangerZone:SetWidth(math.max(sbw * (fTwist - fDanger), 0.001))
+			bar.dangerZone:SetVertexColor(0.85, 0.20, 0.20, 0.60)
+			bar.dangerZone:SetShown((fTwist - fDanger) > 0)
+			placeTick(bar.dangerTick, dangerStart, cfg.texture, 0.90, 0.15, 0.15, 1.0, cfg.width)
+			local c = cfg.color
+			placeTick(bar.marker, twistStart, cfg.texture, c[1], c[2], c[3], c[4], cfg.width)
+		else
+			bar.marker:Hide()
+			bar.dangerZone:Hide()
+			bar.dangerTick:Hide()
+		end
+
 	else
 		bar.marker:Hide()
+		bar.dangerZone:Hide()
+		bar.dangerTick:Hide()
 	end
 
 	if bar.timer:IsShown() then
