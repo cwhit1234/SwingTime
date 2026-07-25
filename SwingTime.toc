@@ -8,8 +8,7 @@
 ## IconTexture: Interface\Icons\Spell_Nature_TimeStop
 ## X-Category: Combat
 ## X-License: MIT
-# TODO: replace 000000 with your CurseForge project ID before the first release.
-## X-Curse-Project-ID: 000000
+## X-Curse-Project-ID: 1624158
 
 # Embedded libraries (LibStub -> CallbackHandler-1.0 -> LibSharedMedia-3.0)
 embeds.xml
