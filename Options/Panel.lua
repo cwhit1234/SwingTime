@@ -274,10 +274,6 @@ local function BuildBarsTab(content)
 			get = function() return ST.Config.Get(base .. ".enabled") end,
 			set = function(v) ST.Config.Set(base .. ".enabled", v) end,
 		}), 24))
-		AddRefresher(GAdd(g, 1, Widgets.CreateSlider(content, L["Position (seconds before swing)"], 0.1, 2.0, 0.05, {
-			get = function() return ST.Config.Get(base .. ".position") end,
-			set = function(v) ST.Config.Set(base .. ".position", v) end,
-		}), 40))
 		AddRefresher(GAdd(g, 1, Widgets.CreateSlider(content, L["Marker width"], 1, 8, 1, {
 			get = function() return ST.Config.Get(base .. ".width") end,
 			set = function(v) ST.Config.Set(base .. ".width", v) end,

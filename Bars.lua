@@ -219,17 +219,22 @@ function Bars.UpdateBar(bar)
 		bar.castZone:Hide()
 	end
 
-	-- Vertical timing marker: Multi-Shot clip point (hunter ranged bar) or
-	-- seal-twist window (paladin main-hand bar). `position` is seconds before
-	-- the shot/swing; the marker sits at that point on the bar.
-	local markerCfg
+	-- Vertical timing marker at a mechanic-fixed point on the bar:
+	--  * Hunter ranged: the Multi-Shot clip point. Multi-Shot's cast will clip
+	--    the auto shot if cast within (auto-shot cast window + multi-shot cast)
+	--    of the shot, i.e. ~2x the cast window -- cast to the left of the line.
+	--  * Paladin main-hand: the seal-twist window (~0.4s before the swing, the
+	--    Seal of Command activation window).
+	local markerCfg, markerPos
 	if bar.key == "ranged" and ST.SwingCore.rangedIsAutoShot then
 		markerCfg = ST.Config.Get("markers.multishot")
+		markerPos = 2 * (ST.SwingCore.rangedCastTime or 0.5)
 	elseif bar.key == "mainhand" and ST.playerClass == "PALADIN" then
 		markerCfg = ST.Config.Get("markers.sealtwist")
+		markerPos = 0.4
 	end
-	if markerCfg and markerCfg.enabled and speed > 0 then
-		local frac = 1 - (markerCfg.position or 0.4) / speed
+	if markerCfg and markerCfg.enabled and markerPos and speed > 0 then
+		local frac = 1 - markerPos / speed
 		if frac < 0 then frac = 0 elseif frac > 1 then frac = 1 end
 		local x = bar.sb:GetWidth() * frac
 		bar.marker:ClearAllPoints()

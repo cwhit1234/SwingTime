@@ -62,24 +62,22 @@ local defaults = {
 		},
 	},
 
-	-- Timing markers: a configurable vertical line drawn on a bar.
+	-- Timing markers: a vertical line drawn on a bar. Its POSITION is fixed by
+	-- the mechanic (not user-configurable); only appearance is customizable.
 	--  * multishot: on the ranged bar, for hunters (the Multi-Shot clip point).
 	--  * sealtwist: on the main-hand bar, for paladins (the seal-twist window).
-	-- `position` is how many seconds before the shot/swing the marker sits.
 	markers = {
 		multishot = {
-			enabled  = true,
-			position = 0.5,
-			width    = 3,
-			texture  = "SwingTime Flat",
-			color    = { 1.00, 0.85, 0.20, 1.00 },
+			enabled = true,
+			width   = 3,
+			texture = "SwingTime Flat",
+			color   = { 1.00, 0.85, 0.20, 1.00 },
 		},
 		sealtwist = {
-			enabled  = true,
-			position = 0.4,
-			width    = 3,
-			texture  = "SwingTime Flat",
-			color    = { 0.95, 0.40, 0.95, 1.00 },
+			enabled = true,
+			width   = 3,
+			texture = "SwingTime Flat",
+			color   = { 0.95, 0.40, 0.95, 1.00 },
 		},
 	},
 }

@@ -2,11 +2,12 @@
 
 ## 1.0.1
 
-- Added a configurable **timing marker** (a vertical line) on the bars:
+- Added a **timing marker** (a vertical line) on the bars:
   - **Hunter** — a Multi-Shot clip marker on the ranged bar.
   - **Paladin** — a seal-twist window marker on the main-hand bar.
-- Each marker has its own **enable, position, width, texture, and color**, and only shows
-  for the relevant class. Configure it in the config window's Bars tab.
+- The marker position is fixed by the mechanic; you can customize its **width, texture, and
+  color** (and toggle it on/off). Only shows for the relevant class. Configure it in the
+  config window's Bars tab.
 
 ## 1.0.0
 
