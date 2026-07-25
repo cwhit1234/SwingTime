@@ -1,6 +1,6 @@
 # SwingTime — Changelog
 
-## 1.0.2
+## 1.0.1
 
 - Added mechanic-accurate **timing markers**, shown only for the relevant class:
   - **Hunter** — a Multi-Shot clip line on the ranged bar (at the auto-shot + multi-shot
