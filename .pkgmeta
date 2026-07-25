@@ -9,6 +9,9 @@ externals:
 ignore:
   - .github
   - .gitignore
+  - .gitattributes
   - .pkgmeta
+  - Gallery
+  - DESCRIPTION.md
 
 enable-nolib-creation: no

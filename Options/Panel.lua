@@ -580,8 +580,13 @@ function Panel.Initialize()
 	hbg:SetAllPoints()
 	hbg:SetColorTexture(0.10, 0.13, 0.19, 0.95)
 
+	local logo = header:CreateTexture(nil, "ARTWORK")
+	logo:SetTexture([[Interface\AddOns\SwingTime\Media\SwingTimeLogo]])
+	logo:SetPoint("LEFT", header, "LEFT", 14, 0)
+	logo:SetSize(40, 40)
+
 	local title = header:CreateFontString(nil, "OVERLAY", "GameFontNormalHuge")
-	title:SetPoint("TOPLEFT", 18, -10)
+	title:SetPoint("TOPLEFT", logo, "TOPRIGHT", 8, -2)
 	title:SetText("SwingTime")
 	title:SetTextColor(0.55, 0.78, 1.0)
 

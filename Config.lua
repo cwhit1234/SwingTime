@@ -77,7 +77,7 @@ local defaults = {
 			enabled = true,
 			width   = 3,
 			texture = "SwingTime Flat",
-			color   = { 0.95, 0.40, 0.95, 1.00 },
+			color   = { 0.20, 0.85, 0.35, 1.00 },   -- green (twisting window)
 		},
 	},
 }

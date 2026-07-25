@@ -8,7 +8,8 @@
   - **Paladin** — a seal-twist guide on the main-hand bar: a red **danger zone** band with a
     red tick at its start, plus a **twist tick** at the 0.4s twisting window.
 - Marker positions are fixed by the mechanic; you can customize the tick **width, texture, and
-  color** and toggle it on/off in the config window's Bars tab.
+  color** and toggle it on/off in the config window's Bars tab. The seal-twist tick defaults to green.
+- Added the SwingTime logo to the config window header.
 
 ## 1.0.0
 
