@@ -1,7 +1,3 @@
-# Embedded libraries are fetched by the packager (see .pkgmeta externals),
-# so they are not tracked in git. They stay on disk for local testing.
-/libs/
-
 # Packager output
 /.release/
 

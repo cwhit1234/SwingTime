@@ -1,9 +1,7 @@
 package-as: SwingTime
 
-externals:
-  libs/LibStub: https://repos.wowace.com/wow/libstub/trunk/LibStub
-  libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
-  libs/LibSharedMedia-3.0: https://repos.wowace.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
+# Libraries are committed directly in libs/ (not pulled as externals), so the
+# CurseForge packager just includes them as-is.
 
 # Files that should not ship inside the packaged addon.
 ignore:
