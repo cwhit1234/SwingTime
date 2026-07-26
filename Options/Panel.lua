@@ -125,6 +125,25 @@ local function CreateButton(parent, text, w, onclick)
 end
 
 -- ---------------------------------------------------------------------
+--  Shared dropdown item lists (used by the bar style and every warning)
+-- ---------------------------------------------------------------------
+local function FontItems()
+	local out = {}
+	for _, name in ipairs(ST.Media.List("font")) do
+		out[#out + 1] = { value = name, text = name, font = ST.Media.Font(name) }
+	end
+	return out
+end
+
+local function OutlineItems()
+	return {
+		{ value = "NONE", text = L["None"] },
+		{ value = "OUTLINE", text = L["Outline"] },
+		{ value = "THICKOUTLINE", text = L["Thick outline"] },
+	}
+end
+
+-- ---------------------------------------------------------------------
 --  Tab: Bars
 -- ---------------------------------------------------------------------
 local function BuildBarsTab(content)
@@ -208,13 +227,7 @@ local function BuildBarsTab(content)
 		searchable = true,
 		get = function() return ST.Config.Get("font") end,
 		set = function(v) ST.Config.Set("font", v) end,
-		items = function()
-			local out = {}
-			for _, name in ipairs(ST.Media.List("font")) do
-				out[#out + 1] = { value = name, text = name, font = ST.Media.Font(name) }
-			end
-			return out
-		end,
+		items = FontItems,
 		previewFont = function(v) return ST.Media.Font(v) end,
 	}), 44))
 	AddRefresher(GAdd(g, 1, Widgets.CreateSlider(content, L["Font size"], 6, 24, 1, {
@@ -224,13 +237,7 @@ local function BuildBarsTab(content)
 	AddRefresher(GAdd(g, 1, Widgets.CreateDropdown(content, L["Font outline"], {
 		get = function() return ST.Config.Get("fontOutline") end,
 		set = function(v) ST.Config.Set("fontOutline", v) end,
-		items = function()
-			return {
-				{ value = "NONE", text = L["None"] },
-				{ value = "OUTLINE", text = L["Outline"] },
-				{ value = "THICKOUTLINE", text = L["Thick outline"] },
-			}
-		end,
+		items = OutlineItems,
 	}), 44))
 
 	-- Global column 2: colors + text/opacity behavior
@@ -296,6 +303,84 @@ local function BuildBarsTab(content)
 			set = function(v) ST.Config.Set(base .. ".color", v) end,
 		}), 22))
 	end
+
+	content:SetHeight(GHeight(g))
+end
+
+-- ---------------------------------------------------------------------
+--  Tab: Warnings
+-- ---------------------------------------------------------------------
+-- One message's control stack. Both messages are identical in structure,
+-- so they sit side by side in the two grid columns.
+local function BuildMessage(g, content, col, key, title)
+	local base = "warnings." .. key
+	local function P(field)
+		return {
+			get = function() return ST.Config.Get(base .. "." .. field) end,
+			set = function(v) ST.Config.Set(base .. "." .. field, v) end,
+		}
+	end
+
+	GSection(g, col, title)
+	AddRefresher(GAdd(g, col, Widgets.CreateCheckbox(content, L["Enable"], P("enabled")), 24))
+	AddRefresher(GAdd(g, col, Widgets.CreateEditBox(content, L["Message text"], {
+		get = P("text").get,
+		set = P("text").set,
+		maxLetters = 40,
+	}), 40))
+	AddRefresher(GAdd(g, col, Widgets.CreateDropdown(content, L["Font"], {
+		searchable = true,
+		items = FontItems,
+		get = P("font").get,
+		set = P("font").set,
+		previewFont = function(v) return ST.Media.Font(v) end,
+	}), 44))
+	AddRefresher(GAdd(g, col, Widgets.CreateSlider(content, L["Font size"], 8, 48, 1,
+		P("fontSize")), 40))
+	AddRefresher(GAdd(g, col, Widgets.CreateDropdown(content, L["Font outline"], {
+		items = OutlineItems,
+		get = P("fontOutline").get,
+		set = P("fontOutline").set,
+	}), 44))
+	AddRefresher(GAdd(g, col, Widgets.CreateColorSwatch(content, L["Color"], P("color")), 22))
+end
+
+local function BuildWarningsTab(content)
+	local g = NewGrid(content)
+	GHeader(g, 1, L["Warnings"])
+	GAlign(g, 1, 2)
+
+	-- Block-level settings (position is set by dragging, via /st unlock).
+	AddRefresher(GAdd(g, 1, Widgets.CreateCheckbox(content, L["Show warnings"], {
+		get = function() return ST.Config.Get("warnings.enabled") end,
+		set = function(v) ST.Config.Set("warnings.enabled", v) end,
+	}), 24))
+	AddRefresher(GAdd(g, 1, Widgets.CreateSlider(content, L["Line spacing"], 0, 40, 1, {
+		get = function() return ST.Config.Get("warnings.spacing") end,
+		set = function(v) ST.Config.Set("warnings.spacing", v) end,
+	}), 40))
+
+	-- Escape hatch for the melee/ranged auto-detection.
+	local rangeChoices = {
+		{ value = "auto", text = L["Automatic"] },
+		{ value = "melee", text = L["Melee"] },
+		{ value = "ranged", text = L["Ranged"] },
+	}
+	AddRefresher(GAdd(g, 2, Widgets.CreateDropdown(content, L["Range check"], {
+		get = function()
+			local m = ST.Config.Get("warnings.rangeMode")
+			for _, c in ipairs(rangeChoices) do
+				if c.value == m then return c.text end
+			end
+			return L["Automatic"]
+		end,
+		set = function(v) ST.Config.Set("warnings.rangeMode", v) end,
+		items = function() return rangeChoices end,
+	}), 44))
+
+	GSectionSpan(g, L["Messages"])
+	BuildMessage(g, content, 1, "range", L["Out of Range Warning"])
+	BuildMessage(g, content, 2, "attack", L["Not Attacking Warning"])
 
 	content:SetHeight(GHeight(g))
 end
@@ -387,6 +472,7 @@ local function BuildPreview(panel)
 	local caption = panel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	caption:SetPoint("BOTTOMLEFT", preview, "TOPLEFT", 0, 4)
 	caption:SetText(ST.L["Preview"])
+	preview.caption = caption
 
 	local sb = CreateFrame("StatusBar", nil, preview)
 	sb:SetPoint("TOPLEFT", 1, -1)
@@ -465,6 +551,13 @@ local function ShowTab(name)
 	end
 	for tabName, btn in pairs(Panel.tabButtons) do
 		btn:SetSelected(tabName == name)
+	end
+	-- The preview shows a bar, so it means nothing on the Warnings tab
+	-- (where unlocking the block is the live preview instead).
+	if Panel.preview then
+		local show = (name ~= L["Warnings"])
+		Panel.preview:SetShown(show)
+		Panel.preview.caption:SetShown(show)
 	end
 	Panel.currentTab = name
 end
@@ -635,6 +728,7 @@ function Panel.Initialize()
 
 	local tabs = {
 		{ name = L["Bars"], build = BuildBarsTab },
+		{ name = L["Warnings"], build = BuildWarningsTab },
 		{ name = L["Profiles"], build = BuildProfilesTab },
 	}
 
@@ -669,7 +763,7 @@ function Panel.Initialize()
 		yy = yy - 34
 	end
 
-	BuildPreview(win)
+	Panel.preview = BuildPreview(win)
 
 	ShowTab(L["Bars"])
 

@@ -24,8 +24,12 @@ Media.lua
 RangedDB.lua
 SwingCore.lua
 
+# Combat / range detection (feeds the on-screen warnings)
+CombatState.lua
+
 # Display
 Bars.lua
+Warnings.lua
 
 # Bootstrap (loads after modules so all ST.* handlers exist)
 Core.lua

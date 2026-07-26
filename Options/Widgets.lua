@@ -406,6 +406,58 @@ function Widgets.CreateColorSwatch(parent, labelText, cfg)
 end
 
 -- ---------------------------------------------------------------------
+--  Edit box
+--  cfg = { get = fn -> string, set = fn(string), maxLetters = number }
+-- ---------------------------------------------------------------------
+function Widgets.CreateEditBox(parent, labelText, cfg)
+	local container = CreateFrame("Frame", nil, parent)
+	container:SetSize(260, 40)
+
+	local label = container:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+	label:SetPoint("TOPLEFT", 0, 0)
+	label:SetText(labelText)
+
+	local box = CreateFrame("EditBox", nil, container, "InputBoxTemplate")
+	box:SetAutoFocus(false)
+	-- +6 on x: InputBoxTemplate insets its own left edge.
+	box:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 6, -4)
+	box:SetPoint("RIGHT", container, "RIGHT", 0, 0)
+	box:SetHeight(20)
+	box:SetMaxLetters(cfg.maxLetters or 64)
+
+	-- Commit on enter / focus loss rather than OnTextChanged: the latter
+	-- would fire NotifyChanged -> RefreshAll (a pcall over every control)
+	-- on every single keystroke.
+	-- ClearFocus() fires OnEditFocusLost, which would commit a second time;
+	-- the guard keeps one edit to one config write.
+	local committing = false
+	local function commit(self)
+		if committing then return end
+		committing = true
+		cfg.set(self:GetText() or "")
+		self:ClearFocus()
+		committing = false
+	end
+	box:SetScript("OnEnterPressed", commit)
+	box:SetScript("OnEditFocusLost", commit)
+	box:SetScript("OnEscapePressed", function(self)
+		self:SetText(cfg.get() or "")
+		self:ClearFocus()
+	end)
+
+	container.Refresh = function()
+		-- cfg.set -> NotifyChanged -> RefreshAll -> Refresh. Without this
+		-- guard the panel would stomp the user's keystrokes mid-edit.
+		if box:HasFocus() then return end
+		box:SetText(cfg.get() or "")
+		box:SetCursorPosition(0)
+	end
+	container.editBox = box
+	container.Refresh()
+	return container
+end
+
+-- ---------------------------------------------------------------------
 --  Section header
 -- ---------------------------------------------------------------------
 function Widgets.CreateHeader(parent, text)

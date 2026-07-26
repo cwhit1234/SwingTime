@@ -80,6 +80,36 @@ local defaults = {
 			color   = { 0.20, 0.85, 0.35, 1.00 },   -- green (twisting window)
 		},
 	},
+
+	-- Centered on-screen text warnings. Two independent messages stacked
+	-- vertically inside one draggable block; each is styled on its own and
+	-- shares nothing with the bar font settings above.
+	warnings = {
+		enabled   = true,        -- master switch for the whole block
+		point     = "TOP",       -- always TOP; see Warnings.ApplyLayout
+		relPoint  = "CENTER",
+		x         = 0,
+		y         = -120,
+		spacing   = 4,           -- vertical gap between stacked lines
+		rangeMode = "auto",      -- "auto" | "melee" | "ranged"
+
+		range = {
+			enabled     = true,
+			text        = "OUT OF RANGE",   -- empty string -> localized default
+			font        = "Friz Quadrata TT",
+			fontSize    = 24,
+			fontOutline = "OUTLINE",        -- "NONE" | "OUTLINE" | "THICKOUTLINE"
+			color       = { 1.00, 0.25, 0.25, 1.00 },
+		},
+		attack = {
+			enabled     = true,
+			text        = "NOT ATTACKING",
+			font        = "Friz Quadrata TT",
+			fontSize    = 24,
+			fontOutline = "OUTLINE",
+			color       = { 1.00, 0.82, 0.20, 1.00 },
+		},
+	},
 }
 Config.defaults = defaults
 

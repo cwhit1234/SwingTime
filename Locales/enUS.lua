@@ -61,6 +61,22 @@ L["Background color"] = "Background color"
 L["Border color"] = "Border color"
 L["Text color"] = "Text color"
 
+-- Config panel: warnings tab
+L["Warnings"] = "Warnings"
+L["Show warnings"] = "Show warnings"
+L["Messages"] = "Messages"
+L["Out of Range Warning"] = "Out of Range Warning"
+L["Not Attacking Warning"] = "Not Attacking Warning"
+L["Message text"] = "Message text"
+L["Line spacing"] = "Line spacing"
+L["Range check"] = "Range check"
+L["Automatic"] = "Automatic"
+L["Melee"] = "Melee"
+
+-- Warning text (the defaults, used when the message text is left empty)
+L["OUT OF RANGE"] = "OUT OF RANGE"
+L["NOT ATTACKING"] = "NOT ATTACKING"
+
 -- Config panel: profiles tab
 L["Active profile"] = "Active profile"
 L["New"] = "New"
